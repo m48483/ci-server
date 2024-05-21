@@ -63,7 +63,6 @@ class BoardServiceImplTest {
 
     @Test
     void getAll() {
-//
         BDDMockito.given(boardRepository.findAll()).willReturn(
                 List.of(new Board(1l,"test", "test"),new Board(2l,"test", "test")));
 
