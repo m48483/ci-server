@@ -30,7 +30,7 @@ class BoardServiceTest {
 
     @Test
     void getById() {
-        Board board = new Board(1l, "test", "test");
+        Board board = new Board("test", "test", 1L);
         BDDMockito.given(boardRepository.findById(1l))
                 .willReturn(Optional.of(board));
 
@@ -61,7 +61,7 @@ class BoardServiceTest {
 //        given
         BDDMockito.doNothing().when(boardRepository).deleteById(1L);
         BDDMockito.given(boardRepository.findById(1L))
-                        .willReturn(Optional.of(new Board(1L, null,null)));
+                        .willReturn(Optional.of(new Board(null, null,1L)));
         boardService.deleteById(1L);
     }
 
@@ -83,7 +83,7 @@ class BoardServiceTest {
     void getAll() {
 //
         BDDMockito.given(boardRepository.findAll()).willReturn(
-                List.of(new Board(1l,"test", "test"),new Board(2l,"test", "test")));
+                List.of(new Board("test","test", 1L),new Board("test","test", 2L)));
 
         List<BoardResponse> all = boardService.getBoards();
 

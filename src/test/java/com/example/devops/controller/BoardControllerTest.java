@@ -69,7 +69,7 @@ class BoardControllerTest {
 
     @Test
     void deleteById() throws Exception {
-        boardRepository.save(new Board(1L,"test1","test1"));
+        boardRepository.save(new Board("test1","test1",1L));
         BDDMockito.doNothing().when(boardService).deleteById(1L);
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/boards/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk())

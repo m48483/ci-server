@@ -1,15 +1,16 @@
 package com.example.devops.global;
 
 import jakarta.persistence.*;
-import lombok.*;
 
 @Entity
 @Table(name ="BOARDS")
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class Board {
+    public Board(String content, String name, Long id) {
+        this.content = content;
+        this.name = name;
+        this.id = id;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="BOARD_ID")
@@ -17,6 +18,18 @@ public class Board {
 
     @Column(name = "NAME")
     private String name;
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getContent() {
+        return content;
+    }
 
     @Column(name = "CONTENT")
     private String content;
