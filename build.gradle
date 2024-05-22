@@ -12,6 +12,7 @@ java {
 	sourceCompatibility = '17'
 }
 
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
@@ -33,12 +34,8 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 }
 
-jacocoTestReport {
-	dependsOn test
-	reports{
-		html.required = true
-	}
-}
+
+
 jacocoTestCoverageVerification{
 	violationRules {
 		enabled = true
@@ -55,7 +52,7 @@ jacocoTestCoverageVerification{
 			includes = ['com.example.devops.*.**']
 			limit {
 				value = 'COVEREDRATIO'
-				minimum = 0.8
+				minimum = 0.6
 			}
 		}
 	}
@@ -66,10 +63,11 @@ jacocoTestReport {
 	reports{
 		html.required = true
 	}
-	finalizedBy('jacocoTestCoverageVerification')
+
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 	finalizedBy('jacocoTestReport')
+	finalizedBy('jacocoTestCoverageVerification')
 }

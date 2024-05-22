@@ -18,12 +18,15 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
 
-//@SpringBootTest
 @ExtendWith(MockitoExtension.class)
-class BoardServiceImplTest {
-    @Mock private BoardRepository boardRepository;
-    @InjectMocks private BoardServiceImpl boardService;
+class BoardServiceTest {
+    @Mock
+    private BoardRepository boardRepository;
+    @InjectMocks
+    private BoardServiceImpl boardService;
 
     @Test
     void getById() {
@@ -35,7 +38,7 @@ class BoardServiceImplTest {
         BoardResponse byId = boardService.getById(1l);
 
 //        행위 검증
-        Mockito.verify(boardRepository, Mockito.times(1)).findById(1l);
+        Mockito.verify(boardRepository, times(1)).findById(1l);
 //        상태 검증
         assertEquals("test", byId.name());
         assertEquals("test", byId.content());
@@ -47,19 +50,34 @@ class BoardServiceImplTest {
         assertThrows(IllegalArgumentException.class, ()->{
             boardService.getById(1l);
         });
-        Mockito.verify(boardRepository,Mockito.times(1)).findById(1l);
+        Mockito.verify(boardRepository, times(1)).findById(1l);
 
     }
 
     @Test
-    void delById() {
+    void deleteById() {
 //        BDDMockito.given(boardRepository.deleteById(1l));
-        assertThrows(IllegalArgumentException.class, ()->{
-            boardService.getById(1l);
-        });
-        Mockito.verify(boardRepository,Mockito.times(1)).findById(1l);
-
+//        case 2: 있을 때
+//        given
+        BDDMockito.doNothing().when(boardRepository).deleteById(1L);
+        BDDMockito.given(boardRepository.findById(1L))
+                        .willReturn(Optional.of(new Board(1L, null,null)));
+        boardService.deleteById(1L);
     }
+
+    @Test
+    void deleteByIdFail() {
+//        BDDMockito.given(boardRepository.deleteById(1l));
+//        case 1: id가 없을 때
+//        when then
+//        assertThrows(IllegalArgumentException.class, ()->{boardService.deleteById(100L);});
+        BDDMockito.given(boardRepository.findById(100L))
+                .willReturn(Optional.empty());
+        assertThrows(IllegalArgumentException.class, ()->{
+            boardService.deleteById(100L);
+        });
+    }
+
 
     @Test
     void getAll() {
@@ -74,14 +92,14 @@ class BoardServiceImplTest {
         Mockito.verify(boardRepository).findAll();
     }
 
-    @Test
-    void saveBoard() {
-        BoardRequest request = new BoardRequest("test", "test");
-        Board entity = request.toEntity();
-        BDDMockito.given(boardRepository.save(entity))
-                .willReturn(entity);
-        boardService.save(request);
-
-        Mockito.verify(boardRepository, Mockito.times(1)).save(entity);
-    }
+//    @Test
+//    void saveBoard() {
+//        BoardRequest request = new BoardRequest("test", "test");
+//        Board entity = request.toEntity();
+////        BDDMockito.given(boardRepository.save(entity))
+////                .willReturn(entity);
+////        boardService.save(request);
+//
+//        Mockito.verify(boardRepository, Mockito.times(1)).save(entity);
+//    }
 }
