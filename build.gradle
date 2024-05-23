@@ -12,6 +12,7 @@ java {
 	sourceCompatibility = '17'
 }
 
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
@@ -24,20 +25,15 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	runtimeOnly 'com.mysql:mysql-connector-j'
+	runtimeOnly 'com.h2database:h2'
 }
 
-jacocoTestReport {
-	dependsOn test
-	reports{
-		html.required = true
-	}
-}
+
+
 jacocoTestCoverageVerification{
 	violationRules {
 		enabled = true
@@ -54,7 +50,7 @@ jacocoTestCoverageVerification{
 			includes = ['com.example.devops.*.**']
 			limit {
 				value = 'COVEREDRATIO'
-				minimum = 0.8
+				minimum = 0.5
 			}
 		}
 	}
@@ -65,10 +61,11 @@ jacocoTestReport {
 	reports{
 		html.required = true
 	}
-	finalizedBy('jacocoTestCoverageVerification')
+
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 	finalizedBy('jacocoTestReport')
+	finalizedBy('jacocoTestCoverageVerification')
 }

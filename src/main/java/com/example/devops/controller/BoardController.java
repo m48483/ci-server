@@ -3,13 +3,11 @@ package com.example.devops.controller;
 import com.example.devops.request.BoardRequest;
 import com.example.devops.response.BoardResponse;
 import com.example.devops.service.BoardService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/boards")
 @CrossOrigin(
         allowedHeaders = "*",
@@ -18,6 +16,11 @@ import java.util.List;
 )
 public class BoardController {
     private final BoardService boardService;
+
+    public BoardController(BoardService boardService) {
+        this.boardService = boardService;
+    }
+
     @PostMapping
     public void save(@RequestBody BoardRequest req){
         boardService.save(req);
