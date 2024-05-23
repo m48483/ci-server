@@ -1,19 +1,22 @@
 package com.example.devops.service;
 
+import com.example.devops.global.Board;
 import com.example.devops.global.BoardRepository;
 import com.example.devops.request.BoardRequest;
 import com.example.devops.response.BoardResponse;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
+
+    public BoardServiceImpl(BoardRepository boardRepository) {
+        this.boardRepository = boardRepository;
+    }
+
     @Override
     public void save(BoardRequest req) {
         boardRepository.save(req.toEntity());
@@ -32,7 +35,10 @@ public class BoardServiceImpl implements BoardService {
         boardRepository.deleteAll();
     }
 
+    @Override
     public void deleteById(Long id) {
+        Optional<Board> byId = boardRepository.findById(id);
+        byId.orElseThrow(IllegalArgumentException::new);
         boardRepository.deleteById(id);
     }
 
