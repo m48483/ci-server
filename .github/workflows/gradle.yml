@@ -49,6 +49,17 @@ jobs:
     - name: docker push
       run: docker push ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPO}} 
 
+    - name: ssh
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PASSWORD }}
+        script: |
+          docker pull ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPO}} 
+          docker rm -f ${{secrets.DOCKER_REPO}} 
+          docker run --name ${{secrets.DOCKER_REPO}} -p 8080:8080 -e username=${{secrets.GCP_USERNAME}} -e password=${{secrets.GCP_PASSWORD}} -e profiles=prod -network server -d ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPO}} 
+
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
     #
