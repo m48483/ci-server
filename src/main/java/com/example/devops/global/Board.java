@@ -19,6 +19,10 @@ public class Board {
     @Column(name = "NAME")
     private String name;
 
+    public Board() {
+
+    }
+
     public Long getId() {
         return id;
     }
